@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ramiro@portfolio:~</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,800;1,400&family=Archivo:wght@400;600;800&display=swap');
+
+:root{
+  --bg:#0B0E14; --panel:#11151C; --line:#1C212B;
+  --fg:#BFBDB6; --dim:#565B66;
+  --amber:#FFB454; --cyan:#5CCFE6; --green:#87D96C; --purple:#D2A6FF; --red:#F07178;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:14px; line-height:1.6;
+}
+
+/* ---------- window chrome ---------- */
+.wrap{max-width:900px;margin:0 auto;padding:28px 16px;min-height:100%;display:flex;flex-direction:column}
+.term{
+  background:var(--panel); border:1px solid var(--line); border-radius:10px;
+  box-shadow:0 24px 80px rgba(0,0,0,.55); overflow:hidden; flex:1; display:flex;flex-direction:column;
+}
+.bar{
+  display:flex;align-items:center;gap:8px;padding:10px 14px;
+  background:#0E1219;border-bottom:1px solid var(--line);
+}
+.dot{width:12px;height:12px;border-radius:50%}
+.dot.r{background:#FF5F57}.dot.y{background:#FEBC2E}.dot.g{background:#28C840}
+.bar .title{margin-left:8px;color:var(--dim);font-size:12px}
+.bar .gui-btn{
+  margin-left:auto;background:none;border:1px solid var(--line);color:var(--dim);
+  font-family:inherit;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;
+}
+.bar .gui-btn:hover{color:var(--cyan);border-color:var(--cyan)}
+.bar .gui-btn:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+/* ---------- terminal body ---------- */
+.screen{padding:18px 18px 8px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.screen::-webkit-scrollbar{width:8px}
+.screen::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+.out{white-space:pre-wrap;word-break:break-word}
+.out a{color:var(--cyan);text-decoration:none;border-bottom:1px dotted var(--cyan)}
+.out a:hover{border-bottom-style:solid}
+.c-amber{color:var(--amber)} .c-cyan{color:var(--cyan)} .c-green{color:var(--green)}
+.c-purple{color:var(--purple)} .c-red{color:var(--red)} .c-dim{color:var(--dim)}
+.b{font-weight:800}
+.hr{color:var(--line)}
+
+.iline{display:flex;align-items:baseline;padding:4px 18px 16px;gap:0;flex-wrap:wrap}
+.prompt{color:var(--amber);white-space:nowrap;font-weight:600}
+.prompt .path{color:var(--cyan)}
+#cmd{
+  flex:1;min-width:120px;background:none;border:none;outline:none;color:var(--fg);
+  font-family:inherit;font-size:14px;caret-color:var(--amber);
+}
+.hint{padding:0 18px 10px;color:var(--dim);font-size:11px}
+
+/* mobile quick chips */
+.chips{display:none;gap:8px;padding:0 14px 14px;flex-wrap:wrap}
+.chips button{
+  background:#0E1219;border:1px solid var(--line);color:var(--cyan);
+  font-family:inherit;font-size:12px;padding:6px 12px;border-radius:999px;cursor:pointer;
+}
+.chips button:active{background:var(--line)}
+@media (max-width:640px){ .chips{display:flex} .hint{display:none} body{font-size:13px} }
+
+/* boot cursor */
+.blink{display:inline-block;width:8px;height:15px;background:var(--amber);vertical-align:text-bottom;animation:bl 1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.blink{animation:none}}
+
+/* ---------- GUI mode ---------- */
+.gui{display:none;background:var(--bg);min-height:100vh}
+body.gui-on .gui{display:block}
+body.gui-on .wrap{display:none}
+.gui-inner{max-width:880px;margin:0 auto;padding:48px 20px 80px;font-family:'Archivo',system-ui,sans-serif}
+.gui h1{font-size:clamp(30px,6vw,46px);font-weight:800;color:#EDEBE6;letter-spacing:-.02em}
+.gui .sub{color:var(--amber);font-family:'JetBrains Mono',monospace;font-size:14px;margin:6px 0 4px}
+.gui .meta{color:var(--dim);font-size:14px;margin-bottom:8px}
+.gui .links{margin:14px 0 40px;display:flex;gap:14px;flex-wrap:wrap}
+.gui .links a{
+  color:var(--cyan);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:13px;
+  border:1px solid var(--line);padding:7px 14px;border-radius:8px;
+}
+.gui .links a:hover{border-color:var(--cyan)}
+.gui h2{
+  font-family:'JetBrains Mono',monospace;color:var(--amber);font-size:13px;font-weight:600;
+  text-transform:lowercase;letter-spacing:.08em;margin:44px 0 16px;
+}
+.gui h2::before{content:'~/';color:var(--dim)}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:20px 22px;margin-bottom:14px;
+}
+.card .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.card h3{color:#EDEBE6;font-size:17px;font-weight:600}
+.card .when{color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:12px}
+.card p{color:var(--fg);font-size:14.5px;line-height:1.65;margin-top:8px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.tags span{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);
+  background:#0E1219;border:1px solid var(--line);padding:3px 9px;border-radius:999px;
+}
+.back{
+  position:fixed;bottom:22px;right:22px;background:var(--amber);color:#0B0E14;border:none;
+  font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;padding:12px 18px;
+  border-radius:10px;cursor:pointer;box-shadow:0 8px 30px rgba(255,180,84,.35);
+}
+.back:focus-visible{outline:2px solid #fff;outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="term" onclick="focusCmd(event)">
+    <div class="bar">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <span class="title">ramiro@portfolio: ~</span>
+      <button class="gui-btn" onclick="event.stopPropagation();toggleGui(true)">⤷ GUI mode</button>
+    </div>
+    <div class="screen" id="screen"></div>
+    <div class="iline" id="iline" style="display:none">
+      <span class="prompt">ramiro@portfolio<span class="c-dim">:</span><span class="path">~</span><span class="c-dim">$</span>&nbsp;</span>
+      <input id="cmd" autocomplete="off" spellcheck="false" aria-label="terminal command input">
+    </div>
+    <div class="chips" id="chips" style="display:none">
+      <button data-c="help">help</button>
+      <button data-c="whoami">whoami</button>
+      <button data-c="ls projects">projects</button>
+      <button data-c="ls experience">experience</button>
+      <button data-c="skills">skills</button>
+      <button data-c="contact">contact</button>
+      <button data-c="sudo hire-me">sudo hire-me</button>
+    </div>
+    <div class="hint" id="hint" style="display:none">tip: <span class="c-cyan">Tab</span> autocompletes · <span class="c-cyan">↑↓</span> history · type <span class="c-cyan">help</span> to list commands</div>
+  </div>
+</div>
+
+<!-- ================= GUI MODE ================= -->
+<div class="gui" id="gui">
+  <div class="gui-inner">
+    <div class="sub">$ whoami</div>
+    <h1>Ramiro Mantero</h1>
+    <div class="meta">Software Engineer — Frontend Web (React / Next.js / TypeScript) · Buenos Aires, AR (UTC-3)</div>
+    <div class="links">
+      <a href="mailto:manteroramiro@gmail.com">email</a>
+      <a href="https://linkedin.com/in/ramiro-mantero-319931186" target="_blank" rel="noopener">linkedin</a>
+      <a href="https://github.com/ramiromantero" target="_blank" rel="noopener">github</a>
+    </div>
+
+    <h2>experience</h2>
+    <div class="card">
+      <div class="top"><h3>Full Stack Developer — MADIC <span style="color:var(--amber)">★</span></h3><span class="when">2025 — present</span></div>
+      <p>Financial web platform in production for a real client. Built the entire frontend with Next.js 15 + TypeScript: internal tooling, live dashboards, real-time visualization (Recharts) and automated PDF reporting on top of multi-broker data pipelines (PostgreSQL + Prisma). Test-driven with 1,800+ Vitest tests, Sentry observability, CI/CD and clean layered architecture.</p>
+      <div class="tags"><span>Next.js 15</span><span>TypeScript</span><span>React</span><span>PostgreSQL</span><span>Prisma</span><span>Recharts</span><span>Vitest</span><span>Sentry</span></div>
+    </div>
+    <div class="card">
+      <div class="top"><h3>Technology Risk Assistant — EY</h3><span class="when">Nov 2025 — present</span></div>
+      <p>Multinational environment, coordinating with regional teams in English. Analytics reports and dashboards for DV360 media campaigns; extraction, validation and integrity analysis of ERP financial data; ITGC audits (SOX, ISO 27001).</p>
+      <div class="tags"><span>SQL</span><span>DV360</span><span>SOX</span><span>ISO 27001</span></div>
+    </div>
+    <div class="card">
+      <div class="top"><h3>Software Developer — Shaka (e-commerce)</h3><span class="when">Mar — Oct 2025</span></div>
+      <p>Python automation of stock and orders on top of TiendaNube's REST API; internal sales-analysis panel.</p>
+      <div class="tags"><span>Python</span><span>REST APIs</span><span>JSON</span></div>
+    </div>
+    <div class="card">
+      <div class="top"><h3>Fullstack Developer Jr — TDI SRL</h3><span class="when">May 2023 — Aug 2024</span></div>
+      <p>Developed and maintained production applications with Java, PHP and SQL; complex queries for validating large databases; technical liaison with business areas.</p>
+      <div class="tags"><span>Java</span><span>PHP</span><span>SQL</span></div>
+    </div>
+
+    <h2>projects</h2>
+    <div class="card">
+      <div class="top"><h3>AI Automations — Anthropic API + Claude Code</h3><span class="when">2025 — 2026</span></div>
+      <p>AI-driven software in real workflows: Anthropic API integrations and custom Claude Code skills — screenshot-to-PDF pipelines and automatic Figma wireframe generation from live web apps.</p>
+      <div class="tags"><span>Anthropic API</span><span>Claude Code</span><span>Automation</span></div>
+    </div>
+    <div class="card">
+      <div class="top"><h3>Bazaar — Mobile E-Commerce Platform</h3><span class="when">2026</span></div>
+      <p>Cross-platform university team project: React Native + Expo app, Python + FastAPI microservices, AWS API Gateway with JWT, PostgreSQL + MongoDB, Docker, CI/CD with GitHub Actions and PR-based Git workflow.</p>
+      <div class="tags"><span>React Native</span><span>Expo</span><span>FastAPI</span><span>AWS</span><span>Docker</span></div>
+    </div>
+    <div class="card">
+      <div class="top"><h3>FCI Argentina Dashboard</h3><span class="when">2025</span></div>
+      <p>Investment-funds analytics: Python (Pandas) pipeline over the ArgentinaDatos API with an interactive Dash + Plotly dashboard, live in production. <a href="https://github.com/ramiromantero/FCI-dashboard" target="_blank" rel="noopener" style="color:var(--cyan)">github.com/ramiromantero/FCI-dashboard</a></p>
+      <div class="tags"><span>Python</span><span>Pandas</span><span>Dash</span><span>Plotly</span></div>
+    </div>
+
+    <h2>education</h2>
+    <div class="card">
+      <div class="top"><h3>Computer Engineering — University of Buenos Aires (FIUBA)</h3><span class="when">2019 — 2026</span></div>
+      <p>Thesis defended: scalable web platform for early detection of childhood disorders (React, Node.js, PostgreSQL). Academic exchange at UPV (Basque Country, Spain). Graduating Dec 2026. Cambridge FCE — advanced English in daily use.</p>
+    </div>
+  </div>
+  <button class="back" onclick="toggleGui(false)">← back to terminal</button>
+</div>
+
+<script>
+/* ============ content ============ */
+const A='c-amber',C='c-cyan',G='c-green',P='c-purple',D='c-dim',R='c-red';
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const span=(t,c)=>`<span class="${c}">${t}</span>`;
+const link=(t,h)=>`<a href="${h}" target="_blank" rel="noopener">${t}</a>`;
+
+const FILES={
+ 'about.md':
+`${span('# Ramiro Mantero','c-amber b')}
+Frontend-focused software engineer, ${span('3 years','c-green')} building production web apps.
+Specialized in ${span('React, Next.js and TypeScript','c-cyan')}.
+
+Currently building & operating ${span('MADIC','c-amber b')} — a financial platform in
+production for a real client: internal tooling, live dashboards, real-time
+visualization and automated PDF reporting over multi-broker data pipelines.
+
+I work test-driven (${span('1,800+ Vitest tests','c-green')}), with CI/CD, observability
+(Sentry) and clean layered architecture — and I ship ${span('AI-driven software','c-purple')}
+with the Anthropic API in production.
+
+Advanced Computer Engineering student @ UBA (thesis defended ✓).
+Advanced English (Cambridge FCE), daily use with regional teams at EY.`,
+
+ 'skills.json':
+`{
+  ${span('"frontend"','c-cyan')}:  ["React", "Next.js 15", "TypeScript", "Tailwind CSS", "HTML5/CSS3"],
+  ${span('"testing"','c-cyan')}:   ["Vitest (1,800+ tests)", "TDD"],
+  ${span('"dataviz"','c-cyan')}:   ["Recharts", "Plotly"],
+  ${span('"backend"','c-cyan')}:   ["Node.js", "PostgreSQL", "Prisma ORM", "REST APIs"],
+  ${span('"mobile"','c-cyan')}:    ["React Native", "Expo"],
+  ${span('"ai"','c-cyan')}:        ["Anthropic API", "Claude Code"],
+  ${span('"tooling"','c-cyan')}:   ["Git", "CI/CD (GitHub Actions)", "Sentry", "Agile"]
+}`,
+
+ 'education.md':
+`${span('Computer Engineering','c-amber b')} — University of Buenos Aires (FIUBA) · 2019—2026
+  · Thesis defended ✓ — scalable web platform for early detection of
+    childhood disorders (React, Node.js, PostgreSQL)
+  · Academic exchange @ UPV, Basque Country, Spain 🇪🇸
+  · Graduating Dec 2026
+
+${span('Cambridge English: First (FCE)','c-amber b')} · 2018
+  · Advanced English — daily use in technical meetings at EY`,
+
+ 'contact.txt':
+`email     ${link('manteroramiro@gmail.com','mailto:manteroramiro@gmail.com')}
+linkedin  ${link('linkedin.com/in/ramiro-mantero-319931186','https://linkedin.com/in/ramiro-mantero-319931186')}
+github    ${link('github.com/ramiromantero','https://github.com/ramiromantero')}
+location  Buenos Aires, Argentina (UTC-3) — on-site / hybrid / remote`
+};
+
+const EXP={
+ 'madic':
+`${span('★ FULL STACK DEVELOPER — MADIC','c-amber b')} ${span('(independent) · 2025—present','c-dim')}
+Financial web platform, ${span('real client in production','c-green')}.
+
+  · Entire frontend with ${span('Next.js 15 + TypeScript','c-cyan')}: internal tools,
+    live dashboards, real-time viz (Recharts), automated PDF reports
+  · Reusable, well-typed UI component library shared across views
+  · ${span('1,800+ automated tests','c-green')} (Vitest) · Sentry · rate limiting ·
+    clean layered architecture
+  · Multi-broker data ingestion pipelines → JSON → PostgreSQL (Prisma)
+
+  ${span('stack:','c-dim')} Next.js 15 · TypeScript · React · Node.js · PostgreSQL · Prisma · Recharts · Vitest · Sentry`,
+
+ 'ey':
+`${span('TECHNOLOGY RISK ASSISTANT — EY','c-amber b')} ${span('· Nov 2025—present','c-dim')}
+  · Multinational structure; coordination with regional teams,
+    technical meetings ${span('in English','c-cyan')}
+  · Analytics reports & dashboards for DV360 media campaigns
+  · ERP financial data extraction & integrity analysis; ITGC audits
+    (${span('SOX, ISO 27001','c-purple')})`,
+
+ 'shaka':
+`${span('SOFTWARE DEVELOPER — SHAKA','c-amber b')} ${span('(e-commerce) · Mar—Oct 2025','c-dim')}
+  · Python automation of stock & orders over TiendaNube's REST API
+  · Internal sales-analysis panel`,
+
+ 'tdi':
+`${span('FULLSTACK DEVELOPER JR — TDI SRL','c-amber b')} ${span('· May 2023—Aug 2024','c-dim')}
+  · Production apps with Java, PHP and SQL
+  · Complex queries validating large databases
+  · Technical liaison with business areas`
+};
+
+const PRJ={
+ 'ai-automations':
+`${span('AI AUTOMATIONS','c-purple b')} — Anthropic API + Claude Code ${span('· 2025—2026','c-dim')}
+  AI-driven software in real workflows:
+  · Anthropic API (Claude) integrations in production
+  · Custom Claude Code skills: screenshot-to-PDF pipelines,
+    automatic Figma wireframe generation from live web apps`,
+
+ 'bazaar':
+`${span('BAZAAR','c-purple b')} — Mobile E-Commerce Platform ${span('· 2026 · university team project','c-dim')}
+  · React Native + Expo cross-platform app
+  · Python + FastAPI microservices · AWS API Gateway + JWT
+  · PostgreSQL + MongoDB · Docker · CI/CD (GitHub Actions)`,
+
+ 'fci-dashboard':
+`${span('FCI ARGENTINA DASHBOARD','c-purple b')} — Investment Funds Analytics ${span('· 2025','c-dim')}
+  · Python (Pandas) pipeline over the ArgentinaDatos API
+  · Interactive dashboard with Dash + Plotly, ${span('live in production','c-green')}
+  · ${link('github.com/ramiromantero/FCI-dashboard','https://github.com/ramiromantero/FCI-dashboard')}`
+};
+
+/* ============ terminal engine ============ */
+const screen=document.getElementById('screen');
+const cmdInput=document.getElementById('cmd');
+const iline=document.getElementById('iline');
+let history=[],hIdx=-1;
+
+function print(html,cls=''){
+  const d=document.createElement('div');
+  d.className='out '+cls; d.innerHTML=html;
+  screen.appendChild(d); screen.scrollTop=screen.scrollHeight;
+  return d;
+}
+function echoCmd(c){
+  print(`${span('ramiro@portfolio','c-amber b')}${span(':','c-dim')}${span('~','c-cyan')}${span('$','c-dim')} ${esc(c)}`);
+}
+function focusCmd(e){ if(window.getSelection().toString()==='') cmdInput.focus(); }
+
+const HELP=
+`${span('available commands','c-amber b')}
+  ${span('whoami','c-cyan')}            who am I, in one line
+  ${span('cat about.md','c-cyan')}      full profile
+  ${span('ls','c-cyan')}                list everything
+  ${span('ls experience','c-cyan')}     work experience index
+  ${span('ls projects','c-cyan')}       selected projects index
+  ${span('open <name>','c-cyan')}       open an experience or project  ${span('(e.g. open madic)','c-dim')}
+  ${span('skills','c-cyan')}            cat skills.json
+  ${span('education','c-cyan')}         cat education.md
+  ${span('contact','c-cyan')}           cat contact.txt
+  ${span('gui','c-cyan')}               switch to the human-friendly view
+  ${span('clear','c-cyan')}             clear the screen
+  ${span('help','c-cyan')}              this menu
+${span('  …and maybe try sudo something 👀','c-dim')}`;
+
+function run(raw){
+  const c=raw.trim(); if(!c) return;
+  echoCmd(c);
+  history.push(c); hIdx=history.length;
+  const [cmd,...args]=c.toLowerCase().split(/\s+/);
+  const arg=args.join(' ');
+
+  switch(cmd){
+    case 'help': case '?': print(HELP); break;
+    case 'whoami':
+      print(`${span('Ramiro Mantero','c-amber b')} — Software Engineer · Frontend Web (${span('React / Next.js / TypeScript','c-cyan')})\nBuenos Aires, AR (UTC-3) · ${span('open to work','c-green')}`); break;
+    case 'ls':
+      if(arg.startsWith('exp')) print(`${span('experience/','c-cyan b')}\n  ${span('madic','c-amber')}  ${span('★ flagship','c-dim')}\n  ey\n  shaka\n  tdi\n${span('→ open <name>','c-dim')}`);
+      else if(arg.startsWith('proj')) print(`${span('projects/','c-cyan b')}\n  ai-automations\n  bazaar\n  fci-dashboard\n${span('→ open <name>','c-dim')}`);
+      else print(`${span('about.md','c-green')}  ${span('experience/','c-cyan')}  ${span('projects/','c-cyan')}  ${span('skills.json','c-green')}  ${span('education.md','c-green')}  ${span('contact.txt','c-green')}`);
+      break;
+    case 'cat':{
+      const f=Object.keys(FILES).find(k=>k===arg||k.split('.')[0]===arg);
+      if(f) print(FILES[f]);
+      else if(EXP[arg]||PRJ[arg]) print(EXP[arg]||PRJ[arg]);
+      else print(span(`cat: ${esc(arg||'?')}: no such file — try ls`,'c-red'));
+      break;}
+    case 'open': case 'cd':{
+      if(EXP[arg]) print(EXP[arg]);
+      else if(PRJ[arg]) print(PRJ[arg]);
+      else print(span(`open: '${esc(arg||'?')}' not found — try ls experience / ls projects`,'c-red'));
+      break;}
+    case 'skills': print(FILES['skills.json']); break;
+    case 'education': case 'edu': print(FILES['education.md']); break;
+    case 'contact': print(FILES['contact.txt']); break;
+    case 'madic': print(EXP['madic']); break;
+    case 'clear': screen.innerHTML=''; break;
+    case 'gui': toggleGui(true); break;
+    case 'pwd': print('/home/ramiro/portfolio'); break;
+    case 'date': print(new Date().toString()); break;
+    case 'echo': print(esc(args.join(' '))||' '); break;
+    case 'exit': print(span('nice try — there is no escape from good frontend 😌','c-dim')); break;
+    case 'sudo':
+      if(arg.includes('hire')) hireMe();
+      else print(span('ramiro is not in the sudoers file. This incident will be reported. (just kidding — try sudo hire-me)','c-red'));
+      break;
+    case 'hire-me': case 'hire': hireMe(); break;
+    case 'npm': case 'yarn': case 'pnpm':
+      print(`added ${span('1 developer','c-green')} in 0.42s\n${span('✓','c-green')} ramiro-mantero@3.0.0 — 0 vulnerabilities found`); break;
+    case 'git':
+      print(`On branch ${span('main','c-cyan')}\nYour career is ahead of 'origin/main' by ${span('1,800+ commits','c-green')}.\nnothing to hide, working tree clean ✓`); break;
+    case 'vim': case 'nano': case 'emacs':
+      print(span('editor wars are out of scope for this portfolio 🕊️','c-dim')); break;
+    default:
+      print(`${span(esc(cmd)+': command not found','c-red')} — type ${span('help','c-cyan')}`);
+  }
+}
+
+function hireMe(){
+  print(`${span('[sudo] password for recruiter:','c-dim')} ********
+${span('✓ permission granted','c-green b')}
+Initializing onboarding sequence…
+  ${span('✓','c-green')} strong React/Next.js/TS profile detected
+  ${span('✓','c-green')} 1,800+ tests — this one writes tests without being asked
+  ${span('✓','c-green')} timezone UTC-3 — overlaps with US & EU
+
+${span('next step →','c-amber b')} ${link('manteroramiro@gmail.com','mailto:manteroramiro@gmail.com')} 🚀`);
+}
+
+/* autocomplete */
+const CMDS=['help','whoami','ls','ls experience','ls projects','cat','open','skills','education','contact','clear','gui','sudo hire-me'];
+const ARGS=[...Object.keys(FILES),...Object.keys(EXP),...Object.keys(PRJ)];
+cmdInput?.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){ run(cmdInput.value); cmdInput.value=''; }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); if(hIdx>0){hIdx--; cmdInput.value=history[hIdx];} }
+  else if(e.key==='ArrowDown'){ e.preventDefault(); if(hIdx<history.length-1){hIdx++; cmdInput.value=history[hIdx];} else {hIdx=history.length; cmdInput.value='';} }
+  else if(e.key==='Tab'){
+    e.preventDefault();
+    const v=cmdInput.value; const parts=v.split(/\s+/);
+    if(parts.length<=1){
+      const m=CMDS.filter(x=>x.startsWith(v));
+      if(m.length===1) cmdInput.value=m[0]+' ';
+      else if(m.length>1) print(span(m.join('   '),'c-dim'));
+    }else{
+      const last=parts[parts.length-1];
+      const m=ARGS.filter(x=>x.startsWith(last));
+      if(m.length===1){ parts[parts.length-1]=m[0]; cmdInput.value=parts.join(' '); }
+      else if(m.length>1) print(span(m.join('   '),'c-dim'));
+    }
+  }
+});
+document.getElementById('chips').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  run(b.dataset.c); cmdInput.focus();
+});
+
+/* ============ boot sequence ============ */
+const BOOT=[
+ [span('ramiro-os v3.0.0','c-amber b')+span('  (build 2026: "shipped & tested")','c-dim'),120],
+ [span('▸','c-dim')+' mounting '+span('/experience','c-cyan')+' ……… '+span('ok','c-green'),160],
+ [span('▸','c-dim')+' mounting '+span('/projects','c-cyan')+' ………… '+span('ok','c-green'),140],
+ [span('▸','c-dim')+' loading '+span('madic-platform','c-amber')+' … '+span('production ✓','c-green'),220],
+ [span('▸','c-dim')+' running test suite ……… '+span('1,800+ passed ✓','c-green'),260],
+ [span('▸','c-dim')+' locale: es-AR · en-GB '+span('(FCE)','c-dim'),140],
+ ['',80],
+ [`Welcome to ${span('Ramiro Mantero','c-amber b')}'s portfolio.`,60],
+ [`Type ${span('help','c-cyan b')} to get started — or hit ${span('GUI mode','c-cyan')} (top-right) for the classic view.`,60],
+ ['',10]
+];
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+async function boot(){
+  for(const [line,delay] of BOOT){
+    print(line);
+    if(!reduced) await new Promise(r=>setTimeout(r,delay));
+  }
+  iline.style.display='flex';
+  document.getElementById('hint').style.display='block';
+  document.getElementById('chips').style.display='';
+  cmdInput.focus();
+}
+boot();
+
+/* ============ gui toggle ============ */
+function toggleGui(on){
+  document.body.classList.toggle('gui-on',on);
+  if(!on) setTimeout(()=>cmdInput.focus(),50);
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

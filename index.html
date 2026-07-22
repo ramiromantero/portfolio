@@ -178,6 +178,31 @@ body.gui-on .wrap{display:none}
 
     <h2>projects</h2>
     <div class="card">
+      <div class="top"><h3>GitHub Galaxy <span style="color:var(--green);font-size:12px">● live</span></h3><span class="when">2026</span></div>
+      <p>A year of my real GitHub contributions rendered as a navigable 3D galaxy with Three.js — every day is a star, every repo a planet. Custom orbit controls, raycasting and an additive-blend starfield. <a href="https://github-galaxy-lemon.vercel.app" target="_blank" rel="noopener" style="color:var(--cyan)">visit</a> · <a href="https://github.com/ramiromantero/github-galaxy" target="_blank" rel="noopener" style="color:var(--cyan)">repo</a></p>
+      <div class="tags"><span>Three.js</span><span>Next.js 15</span><span>TypeScript</span><span>GitHub API</span></div>
+    </div>
+    <div class="card">
+      <div class="top"><h3>AR Finanzas Live <span style="color:var(--green);font-size:12px">● live</span></h3><span class="when">2026</span></div>
+      <p>Real-time dashboard of the Argentine economy: dólar quotes across 7 markets, FX gap, CPI inflation and country risk from public APIs (DolarAPI + ArgentinaDatos), auto-refreshing with graceful fallbacks. <a href="https://finanzas-argentina-live.vercel.app" target="_blank" rel="noopener" style="color:var(--cyan)">visit</a> · <a href="https://github.com/ramiromantero/finanzas-argentina-live" target="_blank" rel="noopener" style="color:var(--cyan)">repo</a></p>
+      <div class="tags"><span>Next.js 15</span><span>TypeScript</span><span>Recharts</span><span>REST APIs</span></div>
+    </div>
+    <div class="card">
+      <div class="top"><h3>Chat with my CV <span style="color:var(--green);font-size:12px">● live</span></h3><span class="when">2026</span></div>
+      <p>My resume as a chat: ask it anything a recruiter would, and a fully client-side intent-matching engine answers from my real CV — zero API cost, typing effect and suggestion chips included. <a href="https://chatea-con-mi-cv.vercel.app" target="_blank" rel="noopener" style="color:var(--cyan)">visit</a> · <a href="https://github.com/ramiromantero/chatea-con-mi-cv" target="_blank" rel="noopener" style="color:var(--cyan)">repo</a></p>
+      <div class="tags"><span>Next.js 15</span><span>TypeScript</span><span>NLP-lite</span></div>
+    </div>
+    <div class="card">
+      <div class="top"><h3>SOC Command Center <span style="color:var(--green);font-size:12px">● live</span></h3><span class="when">2026</span></div>
+      <p>Cinematic security-operations panel: canvas world threat map with animated attack arcs, live event feed, IAM access matrix and SOX/ISO 27001 control coverage — synthetic data, my EY audit background turned into pixels. <a href="https://soc-command-center-zeta.vercel.app" target="_blank" rel="noopener" style="color:var(--cyan)">visit</a> · <a href="https://github.com/ramiromantero/soc-command-center" target="_blank" rel="noopener" style="color:var(--cyan)">repo</a></p>
+      <div class="tags"><span>Next.js 15</span><span>Canvas</span><span>IAM</span><span>SOX / ISO 27001</span></div>
+    </div>
+    <div class="card">
+      <div class="top"><h3>¿Cuánto gana un dev? <span style="color:var(--green);font-size:12px">● live</span></h3><span class="when">2026</span></div>
+      <p>Scrollytelling data story on Argentine IT salaries (Sysarmy 2026.1 survey): peso vs USD gap, seniority medians and remote-international rates, with charts that animate as you scroll. <a href="https://cuanto-gana-un-dev.vercel.app" target="_blank" rel="noopener" style="color:var(--cyan)">visit</a> · <a href="https://github.com/ramiromantero/cuanto-gana-un-dev" target="_blank" rel="noopener" style="color:var(--cyan)">repo</a></p>
+      <div class="tags"><span>Next.js 15</span><span>Recharts</span><span>Data viz</span><span>Scrollytelling</span></div>
+    </div>
+    <div class="card">
       <div class="top"><h3>AI Automations — Anthropic API + Claude Code</h3><span class="when">2025 — 2026</span></div>
       <p>AI-driven software in real workflows: Anthropic API integrations and custom Claude Code skills — screenshot-to-PDF pipelines and automatic Figma wireframe generation from live web apps.</p>
       <div class="tags"><span>Anthropic API</span><span>Claude Code</span><span>Automation</span></div>
@@ -289,6 +314,41 @@ Financial web platform, ${span('real client in production','c-green')}.
 };
 
 const PRJ={
+ 'github-galaxy':
+`${span('GITHUB GALAXY','c-purple b')} — my GitHub year as a 3D galaxy ${span('· 2026 ·','c-dim')} ${span('live','c-green')}
+  · A year of real contributions rendered as a navigable 3D galaxy
+    with ${span('Three.js','c-cyan')}: every day is a star, every repo a planet
+  · Custom orbit controls, raycasting, additive-blend starfield
+  · ${link('github-galaxy-lemon.vercel.app','https://github-galaxy-lemon.vercel.app')} · ${link('repo','https://github.com/ramiromantero/github-galaxy')}`,
+
+ 'finanzas-live':
+`${span('AR FINANZAS LIVE','c-purple b')} — real-time Argentine economy dashboard ${span('· 2026 ·','c-dim')} ${span('live','c-green')}
+  · Dólar quotes (7 markets), FX gap, CPI inflation & country risk
+    from public APIs (DolarAPI + ArgentinaDatos), auto-refresh 60s
+  · ${span('Next.js 15 · TypeScript · Recharts','c-cyan')} · graceful API fallbacks
+  · ${link('finanzas-argentina-live.vercel.app','https://finanzas-argentina-live.vercel.app')} · ${link('repo','https://github.com/ramiromantero/finanzas-argentina-live')}`,
+
+ 'chat-cv':
+`${span('CHAT WITH MY CV','c-purple b')} — my resume, as a chat ${span('· 2026 ·','c-dim')} ${span('live','c-green')}
+  · Ask it anything a recruiter would — a ${span('client-side intent-matching','c-cyan')}
+    engine answers from my real CV, zero API cost
+  · Typing effect, suggestion chips, tech fact sheet
+  · ${link('chatea-con-mi-cv.vercel.app','https://chatea-con-mi-cv.vercel.app')} · ${link('repo','https://github.com/ramiromantero/chatea-con-mi-cv')}`,
+
+ 'soc-panel':
+`${span('SOC COMMAND CENTER','c-purple b')} — cinematic security ops panel ${span('· 2026 ·','c-dim')} ${span('live','c-green')}
+  · Canvas world threat map with animated attack arcs, live event
+    feed, ${span('IAM access matrix','c-cyan')} & SOX/ISO 27001 control coverage
+  · Synthetic data — my EY audit background turned into pixels
+  · ${link('soc-command-center-zeta.vercel.app','https://soc-command-center-zeta.vercel.app')} · ${link('repo','https://github.com/ramiromantero/soc-command-center')}`,
+
+ 'sueldos-story':
+`${span('¿CUÁNTO GANA UN DEV?','c-purple b')} — scrollytelling data story ${span('· 2026 ·','c-dim')} ${span('live','c-green')}
+  · Argentine IT salaries (Sysarmy 2026.1 survey) told with charts
+    that animate as you scroll — ${span('Next.js 15 + Recharts','c-cyan')}
+  · Peso vs USD gap, seniority medians, remote-international rates
+  · ${link('cuanto-gana-un-dev.vercel.app','https://cuanto-gana-un-dev.vercel.app')} · ${link('repo','https://github.com/ramiromantero/cuanto-gana-un-dev')}`,
+
  'ai-automations':
 `${span('AI AUTOMATIONS','c-purple b')} — Anthropic API + Claude Code ${span('· 2025—2026','c-dim')}
   AI-driven software in real workflows:
@@ -355,7 +415,7 @@ function run(raw){
       print(`${span('Ramiro Mantero','c-amber b')} — Software Engineer · Frontend Web (${span('React / Next.js / TypeScript','c-cyan')})\nBuenos Aires, AR (UTC-3) · ${span('open to work','c-green')}`); break;
     case 'ls':
       if(arg.startsWith('exp')) print(`${span('experience/','c-cyan b')}\n  ${span('madic','c-amber')}  ${span('★ flagship','c-dim')}\n  ey\n  shaka\n  tdi\n${span('→ open <name>','c-dim')}`);
-      else if(arg.startsWith('proj')) print(`${span('projects/','c-cyan b')}\n  ai-automations\n  bazaar\n  fci-dashboard\n${span('→ open <name>','c-dim')}`);
+      else if(arg.startsWith('proj')) print(`${span('projects/','c-cyan b')}\n  ${span('github-galaxy','c-amber')}   ${span('● live','c-green')}\n  ${span('finanzas-live','c-amber')}   ${span('● live','c-green')}\n  ${span('chat-cv','c-amber')}         ${span('● live','c-green')}\n  ${span('soc-panel','c-amber')}       ${span('● live','c-green')}\n  ${span('sueldos-story','c-amber')}   ${span('● live','c-green')}\n  ai-automations\n  bazaar\n  fci-dashboard\n${span('→ open <name>','c-dim')}`);
       else print(`${span('about.md','c-green')}  ${span('experience/','c-cyan')}  ${span('projects/','c-cyan')}  ${span('skills.json','c-green')}  ${span('education.md','c-green')}  ${span('contact.txt','c-green')}`);
       break;
     case 'cat':{

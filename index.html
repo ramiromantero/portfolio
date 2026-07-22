@@ -240,7 +240,7 @@ const FILES={
 Frontend-focused software engineer, ${span('3 years','c-green')} building production web apps.
 Specialized in ${span('React, Next.js and TypeScript','c-cyan')}.
 
-Currently building & operating ${span('MADIC','c-amber b')} — a financial platform in
+Currently building & operating a financial platform in
 production for a real client: internal tooling, live dashboards, real-time
 visualization and automated PDF reporting over multi-broker data pipelines.
 
@@ -280,7 +280,7 @@ location  Buenos Aires, Argentina (UTC-3) — on-site / hybrid / remote`
 };
 
 const EXP={
- 'madic':
+ 'financial-platform':
 `${span('★ FULL STACK DEVELOPER — Freelance · Plataforma financiera (cliente confidencial)','c-amber b')} ${span('(independent) · 2025—present','c-dim')}
 Financial web platform, ${span('real client in production','c-green')}.
 
@@ -393,7 +393,7 @@ const HELP=
   ${span('ls','c-cyan')}                list everything
   ${span('ls experience','c-cyan')}     work experience index
   ${span('ls projects','c-cyan')}       selected projects index
-  ${span('open <name>','c-cyan')}       open an experience or project  ${span('(e.g. open madic)','c-dim')}
+  ${span('open <name>','c-cyan')}       open an experience or project  ${span('(e.g. open financial-platform)','c-dim')}
   ${span('skills','c-cyan')}            cat skills.json
   ${span('education','c-cyan')}         cat education.md
   ${span('contact','c-cyan')}           cat contact.txt
@@ -414,7 +414,7 @@ function run(raw){
     case 'whoami':
       print(`${span('Ramiro Mantero','c-amber b')} — Software Engineer · Frontend Web (${span('React / Next.js / TypeScript','c-cyan')})\nBuenos Aires, AR (UTC-3) · ${span('open to work','c-green')}`); break;
     case 'ls':
-      if(arg.startsWith('exp')) print(`${span('experience/','c-cyan b')}\n  ${span('madic','c-amber')}  ${span('★ flagship','c-dim')}\n  ey\n  shaka\n  tdi\n${span('→ open <name>','c-dim')}`);
+      if(arg.startsWith('exp')) print(`${span('experience/','c-cyan b')}\n  ${span('financial-platform','c-amber')}  ${span('★ flagship','c-dim')}\n  ey\n  shaka\n  tdi\n${span('→ open <name>','c-dim')}`);
       else if(arg.startsWith('proj')) print(`${span('projects/','c-cyan b')}\n  ${span('github-galaxy','c-amber')}   ${span('● live','c-green')}\n  ${span('finanzas-live','c-amber')}   ${span('● live','c-green')}\n  ${span('chat-cv','c-amber')}         ${span('● live','c-green')}\n  ${span('soc-panel','c-amber')}       ${span('● live','c-green')}\n  ${span('sueldos-story','c-amber')}   ${span('● live','c-green')}\n  ai-automations\n  bazaar\n  fci-dashboard\n${span('→ open <name>','c-dim')}`);
       else print(`${span('about.md','c-green')}  ${span('experience/','c-cyan')}  ${span('projects/','c-cyan')}  ${span('skills.json','c-green')}  ${span('education.md','c-green')}  ${span('contact.txt','c-green')}`);
       break;
@@ -432,7 +432,7 @@ function run(raw){
     case 'skills': print(FILES['skills.json']); break;
     case 'education': case 'edu': print(FILES['education.md']); break;
     case 'contact': print(FILES['contact.txt']); break;
-    case 'madic': print(EXP['madic']); break;
+    case 'financial-platform': print(EXP['financial-platform']); break;
     case 'clear': screen.innerHTML=''; break;
     case 'gui': toggleGui(true); break;
     case 'pwd': print('/home/ramiro/portfolio'); break;
@@ -498,7 +498,7 @@ const BOOT=[
  [span('ramiro-os v3.0.0','c-amber b')+span('  (build 2026: "shipped & tested")','c-dim'),120],
  [span('▸','c-dim')+' mounting '+span('/experience','c-cyan')+' ……… '+span('ok','c-green'),160],
  [span('▸','c-dim')+' mounting '+span('/projects','c-cyan')+' ………… '+span('ok','c-green'),140],
- [span('▸','c-dim')+' loading '+span('madic-platform','c-amber')+' … '+span('production ✓','c-green'),220],
+ [span('▸','c-dim')+' loading '+span('financial-platform','c-amber')+' … '+span('production ✓','c-green'),220],
  [span('▸','c-dim')+' running test suite ……… '+span('1,800+ passed ✓','c-green'),260],
  [span('▸','c-dim')+' locale: es-AR · en-GB '+span('(FCE)','c-dim'),140],
  ['',80],
